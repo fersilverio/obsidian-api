@@ -4,7 +4,7 @@ import { AssociateUser } from "../entities/associate-user.entity";
 import { AssociateUsersRepository } from "./associate-users.repository";
 
 export class InMemoryAssociateUsersRepository implements AssociateUsersRepository {
-    items: AssociateUser[] = [];
+    users: AssociateUser[] = [];
 
     async createUser(data: CreateAssociateUserDto): Promise<AssociateUser> {
         if (!data) {
@@ -12,7 +12,7 @@ export class InMemoryAssociateUsersRepository implements AssociateUsersRepositor
         }
 
         const user: AssociateUser = {
-            id: this.items.length + 1,
+            id: this.users.length + 1,
             name: data.name,
             email: data.email,
             password: data.password,
@@ -23,21 +23,67 @@ export class InMemoryAssociateUsersRepository implements AssociateUsersRepositor
             createdAt: new Date(),
         }
 
-        this.items.push(user);
+        this.users.push(user);
 
         return user;
     }
-    findUserById(id: string): Promise<AssociateUser> {
-        throw new Error("Method not implemented.");
+    async findUserById(id: string): Promise<AssociateUser> {
+        if (!id) {
+            throw new Error("No id provided!");
+        }
+
+        const user = this.users.find(user => user.id === +id);
+
+        if (!user) {
+            throw new Error("User not found!");
+        }
+
+        return user;
     }
-    findAllUsers(): Promise<AssociateUser[]> {
-        throw new Error("Method not implemented.");
+    async findAllUsers(): Promise<AssociateUser[]> {
+        return this.users;
     }
-    updateUser(id: string, data: UpdateAssociateUserDto): Promise<AssociateUser> {
-        throw new Error("Method not implemented.");
+    async updateUser(id: string, data: UpdateAssociateUserDto): Promise<AssociateUser> {
+        if (!id) {
+            throw new Error("No id provided!");
+        }
+
+        if (!data) {
+            throw new Error("No data provided!");
+        }
+
+        const userIndex = this.users.findIndex(user => user.id === +id);
+
+        this.users[userIndex] = {
+            id: +id,
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            level: data.level,
+            rank: data.rank,
+            clan: data.clan,
+            numberOfCards: data.numberOfCards,
+            updatedAt: data.updatedAt,
+        };
+
+        return this.users[userIndex];
+
+
     }
-    deleteUser(id: string): Promise<AssociateUser> {
-        throw new Error("Method not implemented.");
+    async deleteUser(id: string): Promise<AssociateUser> {
+        if (!id) {
+            throw new Error("No id provided!");
+        }
+
+        const index = this.users.findIndex(user => user.id === +id);
+
+        if (!this.users[index]) {
+            throw new Error("User not found!");
+        }
+
+        this.users.splice(index, 1);
+
+        return this.users[index];
     }
 
 }

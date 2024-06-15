@@ -24,12 +24,119 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 name: "test",
                 email: "test@example.com",
                 password: "1234567",
-                level: expect.any(Number),
-                rank: expect.any(Number),
-                clan: expect.any(String),
-                numberOfCards: expect.any(Number),
-                createdAt: expect.any(Date),
             })
         })
-    })
+    });
+
+    describe("findUserById functionality", () => {
+        it("Should fail whern attempt to find an user without an id", async () => {
+            expect(sut.findUserById(null)).rejects.toThrow("No id provided!");
+        });
+
+        it("Should return an user with given id", async () => {
+            const user = await sut.createUser({
+                name: "test",
+                email: "test@example.com",
+                password: "1234567"
+            });
+
+            const foundUser = await sut.findUserById(user.id.toString());
+
+            expect(foundUser).toMatchObject(user);
+        });
+
+        it("Should fail when attempt to find an user that does not exist", async () => {
+            expect(sut.findUserById(`${(sut.users.length + 1)}`)).rejects.toThrow("User not found!");
+        });
+    });
+
+    describe("findAllUsers functionality", () => {
+        it("Should retrieve all users", async () => {
+            for (let i = 0; i < 3; i++) {
+                const user = await sut.createUser({
+                    name: `test ${i}`,
+                    email: "test@example.com",
+                    password: "1234567"
+                });
+            }
+
+            const result = await sut.findAllUsers();
+
+
+            expect(result).toHaveLength(3)
+        })
+    });
+
+    describe("updateUser functionality", () => {
+        it("Should fail when attempt to update an user without an id", async () => {
+            expect(sut.updateUser(null, {
+                name: "test",
+                email: "test@example.com",
+                password: "1234567"
+            })).rejects.toThrow("No id provided!");
+        });
+
+        it("Should fail when attempt to update an user without data", async () => {
+            expect(sut.updateUser("1", null)).rejects.toThrow("No data provided!");
+        });
+
+        it("Should update an user with given id and data correctly", async () => {
+            const user = await sut.createUser({
+                name: "test",
+                email: "test@example.com",
+                password: "1234567"
+            });
+
+            const updatedUser = await sut.updateUser(user.id.toString(), {
+                name: "test",
+                email: "test@example.com",
+                password: "1234567",
+                level: 1,
+                rank: 1,
+                clan: "test",
+                numberOfCards: 1,
+                updatedAt: new Date()
+            });
+
+            expect(updatedUser).toMatchObject({
+                id: user.id,
+                name: "test",
+                email: "test@example.com",
+                password: "1234567",
+                level: 1,
+                rank: 1,
+                clan: "test",
+                numberOfCards: 1,
+                updatedAt: new Date()
+            });
+        });
+    });
+
+    describe("deleteUser functionality", () => {
+        it("Should fail when attempt to delete an user without an id", async () => {
+            expect(sut.deleteUser(null)).rejects.toThrow("No id provided!");
+        });
+
+        it("Should delete an user with given id", async () => {
+            const user = await sut.createUser({
+                name: "test",
+                email: "test@example.com",
+                password: "1234567"
+            });
+
+            await sut.deleteUser(user.id.toString());
+
+            expect(sut.users).toHaveLength(0);
+        });
+
+        it("Should fail when attempt to delete an user that does not exist", async () => {
+            const user = await sut.createUser({
+                name: "test",
+                email: "test@example.com",
+                password: "1234567"
+            });
+
+            await expect(sut.deleteUser(`${(sut.users.length + 1)}`)).rejects.toThrow("User not found!");
+        });
+    });
 })

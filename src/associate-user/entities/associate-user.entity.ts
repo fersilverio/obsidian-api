@@ -3,9 +3,10 @@ export class AssociateUser {
     name: string;
     email: string;
     password: string;
-    level: number;
-    rank: number;
-    clan: string;
-    numberOfCards: number;
-    createdAt: Date;
+    level?: number;
+    rank?: number;
+    clan?: string;
+    numberOfCards?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
