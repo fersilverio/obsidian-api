@@ -1,7 +1,8 @@
-import { CreateAssociateUserDto } from "../dto/create-associate-user.dto";
-import { UpdateAssociateUserDto } from "../dto/update-associate-user.dto";
-import { AssociateUser } from "../entities/associate-user.entity";
-import { AssociateUsersRepository } from "./associate-users.repository";
+import { AssociateUser } from "src/associate-user/entities/associate-user.entity";
+import { AssociateUsersRepository } from "../associate-users.repository";
+import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-user.dto";
+import { UpdateAssociateUserDto } from "src/associate-user/dto/update-associate-user.dto";
+
 
 export class InMemoryAssociateUsersRepository implements AssociateUsersRepository {
     users: AssociateUser[] = [];

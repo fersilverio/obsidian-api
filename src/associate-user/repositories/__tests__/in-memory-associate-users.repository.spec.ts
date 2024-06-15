@@ -1,4 +1,4 @@
-import { InMemoryAssociateUsersRepository } from "../in-memory-associate-users.repository";
+import { InMemoryAssociateUsersRepository } from "../in-memory/in-memory-associate-users.repository";
 
 describe("InMemoryAssociateUsersRepository unit tests", () => {
     let sut: InMemoryAssociateUsersRepository;
