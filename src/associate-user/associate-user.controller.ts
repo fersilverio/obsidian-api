@@ -1,11 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject } from '@nestjs/common';
 import { AssociateUserService } from './associate-user.service';
 import { CreateAssociateUserDto } from './dto/create-associate-user.dto';
 import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
 
 @Controller('associate-user')
 export class AssociateUserController {
-  constructor(private readonly associateUserService: AssociateUserService) {}
+
+  @Inject(AssociateUserService)
+  private associateUserService: AssociateUserService;
 
   @Post()
   create(@Body() createAssociateUserDto: CreateAssociateUserDto) {

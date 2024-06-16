@@ -1,11 +1,26 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable } from '@nestjs/common';
 import { CreateAssociateUserDto } from './dto/create-associate-user.dto';
 import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
+import { AssociateUser } from './entities/associate-user.entity';
+import { AssociateUsersRepository } from './repositories/associate-users.repository';
 
-@Injectable()
+
 export class AssociateUserService {
-  create(createAssociateUserDto: CreateAssociateUserDto) {
-    return 'This action adds a new associateUser';
+
+  @Inject("AssociateUsersRepository")
+  private associateUserRepository: AssociateUsersRepository;
+
+  //constructor(private readonly associateUserRepository: AssociateUsersRepository) { }
+
+
+  async create(dto: CreateAssociateUserDto): Promise<AssociateUser> {
+    if (!dto) {
+      throw new BadRequestException("No data provided to create an user.");
+    }
+
+    const user = await this.associateUserRepository.createUser(dto);
+
+    return user;
   }
 
   findAll() {

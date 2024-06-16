@@ -16,7 +16,8 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
             const user = await sut.createUser({
                 name: "test",
                 email: "test@example.com",
-                password: "1234567"
+                password: "1234567",
+                nick_name: "test-nick"
             });
 
             expect(user).toMatchObject({
@@ -24,6 +25,7 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 name: "test",
                 email: "test@example.com",
                 password: "1234567",
+                nick_name: "test-nick"
             })
         })
     });
@@ -37,7 +39,8 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
             const user = await sut.createUser({
                 name: "test",
                 email: "test@example.com",
-                password: "1234567"
+                password: "1234567",
+                nick_name: "test-nick"
             });
 
             const foundUser = await sut.findUserById(user.id.toString());
@@ -56,7 +59,8 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 const user = await sut.createUser({
                     name: `test ${i}`,
                     email: "test@example.com",
-                    password: "1234567"
+                    password: "1234567",
+                    nick_name: "test-nick"
                 });
             }
 
@@ -84,7 +88,8 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
             const user = await sut.createUser({
                 name: "test",
                 email: "test@example.com",
-                password: "1234567"
+                password: "1234567",
+                nick_name: "test-nick"
             });
 
             const updatedUser = await sut.updateUser(user.id.toString(), {
@@ -94,8 +99,8 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 level: 1,
                 rank: 1,
                 clan: "test",
-                numberOfCards: 1,
-                updatedAt: new Date()
+                number_of_cards: 1,
+                update_date: new Date()
             });
 
             expect(updatedUser).toMatchObject({
@@ -106,8 +111,8 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 level: 1,
                 rank: 1,
                 clan: "test",
-                numberOfCards: 1,
-                updatedAt: new Date()
+                number_of_cards: 1,
+                update_date: new Date()
             });
         });
     });
@@ -121,7 +126,8 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
             const user = await sut.createUser({
                 name: "test",
                 email: "test@example.com",
-                password: "1234567"
+                password: "1234567",
+                nick_name: "test-nick"
             });
 
             await sut.deleteUser(user.id.toString());
@@ -133,7 +139,8 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
             const user = await sut.createUser({
                 name: "test",
                 email: "test@example.com",
-                password: "1234567"
+                password: "1234567",
+                nick_name: "test-nick"
             });
 
             await expect(sut.deleteUser(`${(sut.users.length + 1)}`)).rejects.toThrow("User not found!");
