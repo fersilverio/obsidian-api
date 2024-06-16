@@ -5,6 +5,6 @@ export class UpdateAssociateUserDto extends PartialType(CreateAssociateUserDto) 
     level?: number;
     rank?: number;
     clan?: string;
-    numberOfCards?: number;
-    updatedAt?: Date;
+    number_of_cards?: number;
+    update_date?: Date;
 }

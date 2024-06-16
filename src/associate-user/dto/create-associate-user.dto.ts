@@ -8,6 +8,11 @@ export class CreateAssociateUserDto {
 
     @IsString()
     @IsNotEmpty()
+    @MaxLength(255)
+    nick_name: string;
+
+    @IsString()
+    @IsNotEmpty()
     @IsEmail()
     email: string;
 

@@ -15,13 +15,14 @@ export class InMemoryAssociateUsersRepository implements AssociateUsersRepositor
         const user: AssociateUser = {
             id: this.users.length + 1,
             name: data.name,
+            nick_name: data.nick_name,
             email: data.email,
             password: data.password,
             level: 0,
             rank: 0,
             clan: "",
-            numberOfCards: 0,
-            createdAt: new Date(),
+            number_of_cards: 0,
+            create_date: new Date(),
         }
 
         this.users.push(user);
@@ -58,13 +59,14 @@ export class InMemoryAssociateUsersRepository implements AssociateUsersRepositor
         this.users[userIndex] = {
             id: +id,
             name: data.name,
+            nick_name: data.nick_name,
             email: data.email,
             password: data.password,
             level: data.level,
             rank: data.rank,
             clan: data.clan,
-            numberOfCards: data.numberOfCards,
-            updatedAt: data.updatedAt,
+            number_of_cards: data.number_of_cards,
+            update_date: data.update_date,
         };
 
         return this.users[userIndex];
