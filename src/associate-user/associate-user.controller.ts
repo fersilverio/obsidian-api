@@ -21,7 +21,7 @@ export class AssociateUserController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.associateUserService.findOne(+id);
+    return this.associateUserService.findOne(id);
   }
 
   @Patch(':id')

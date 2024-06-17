@@ -27,8 +27,8 @@ export class AssociateUserService {
     return `This action returns all associateUser`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} associateUser`;
+  async findOne(id: string) {
+    return await this.associateUserRepository.findUserById(id);
   }
 
   update(id: number, updateAssociateUserDto: UpdateAssociateUserDto) {
