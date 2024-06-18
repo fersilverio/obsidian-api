@@ -10,8 +10,6 @@ export class AssociateUserService {
   @Inject("AssociateUsersRepository")
   private associateUserRepository: AssociateUsersRepository;
 
-  //constructor(private readonly associateUserRepository: AssociateUsersRepository) { }
-
 
   async create(dto: CreateAssociateUserDto): Promise<AssociateUser> {
     if (!dto) {
@@ -23,8 +21,8 @@ export class AssociateUserService {
     return user;
   }
 
-  findAll() {
-    return `This action returns all associateUser`;
+  async findAll() {
+    return await this.associateUserRepository.findAllUsers();
   }
 
   async findOne(id: string) {
@@ -32,10 +30,10 @@ export class AssociateUserService {
   }
 
   update(id: number, updateAssociateUserDto: UpdateAssociateUserDto) {
-    return `This action updates a #${id} associateUser`;
+    return this.associateUserRepository.updateUser(`${id}`, updateAssociateUserDto);
   }
 
   remove(id: number) {
-    return `This action removes a #${id} associateUser`;
+    return this.associateUserRepository.deleteUser(`${id}`);
   }
 }
