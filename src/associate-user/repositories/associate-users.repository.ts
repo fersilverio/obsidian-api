@@ -4,8 +4,8 @@ import { AssociateUser } from "../entities/associate-user.entity";
 
 export interface AssociateUsersRepository {
     createUser(data: CreateAssociateUserDto): Promise<AssociateUser>;
-    findUserById(id: string): Promise<AssociateUser>;
+    findUserById(id: number): Promise<AssociateUser>;
     findAllUsers(): Promise<AssociateUser[]>;
-    updateUser(id: string, data: UpdateAssociateUserDto): Promise<AssociateUser>;
-    deleteUser(id: string): Promise<AssociateUser>;
+    updateUser(id: number, data: UpdateAssociateUserDto): Promise<AssociateUser>;
+    deleteUser(id: number): Promise<AssociateUser>;
 }

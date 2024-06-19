@@ -34,7 +34,7 @@ export class AssociateUserController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     try {
-      return this.associateUserService.findOne(id);
+      return this.associateUserService.findOne(+id);
     } catch (err) {
       this.logger.error(err);
       throw new BadRequestException(err.message);

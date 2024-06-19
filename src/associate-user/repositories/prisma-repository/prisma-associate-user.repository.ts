@@ -12,10 +12,6 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
 
     async createUser(data: CreateAssociateUserDto): Promise<AssociateUser> {
         try {
-            if (!data) {
-                throw new BadRequestException("No data provided to create an user.");
-            }
-
             const user = await this.prisma.associateUser.create({ data });
             return user;
         } catch (err) {
@@ -23,7 +19,7 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
             throw new InternalServerErrorException("Could not create user!");
         }
     }
-    async findUserById(id: string): Promise<AssociateUser> {
+    async findUserById(id: number): Promise<AssociateUser> {
         try {
             if (!id) {
                 throw new BadRequestException("No id provided!");
@@ -50,7 +46,7 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
         }
     }
 
-    async updateUser(id: string, data: UpdateAssociateUserDto): Promise<AssociateUser> {
+    async updateUser(id: number, data: UpdateAssociateUserDto): Promise<AssociateUser> {
         try {
             if (!id) {
                 throw new BadRequestException("No id provided!");
@@ -67,7 +63,7 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
             throw new InternalServerErrorException("Unable to update user!");
         }
     }
-    async deleteUser(id: string): Promise<AssociateUser> {
+    async deleteUser(id: number): Promise<AssociateUser> {
         try {
             if (!id) {
                 throw new BadRequestException("No id provided!");

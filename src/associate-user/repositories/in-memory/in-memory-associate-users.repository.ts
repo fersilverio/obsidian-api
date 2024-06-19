@@ -29,7 +29,7 @@ export class InMemoryAssociateUsersRepository implements AssociateUsersRepositor
 
         return user;
     }
-    async findUserById(id: string): Promise<AssociateUser> {
+    async findUserById(id: number): Promise<AssociateUser> {
         if (!id) {
             throw new Error("No id provided!");
         }
@@ -45,7 +45,7 @@ export class InMemoryAssociateUsersRepository implements AssociateUsersRepositor
     async findAllUsers(): Promise<AssociateUser[]> {
         return this.users;
     }
-    async updateUser(id: string, data: UpdateAssociateUserDto): Promise<AssociateUser> {
+    async updateUser(id: number, data: UpdateAssociateUserDto): Promise<AssociateUser> {
         if (!id) {
             throw new Error("No id provided!");
         }
@@ -73,7 +73,7 @@ export class InMemoryAssociateUsersRepository implements AssociateUsersRepositor
 
 
     }
-    async deleteUser(id: string): Promise<AssociateUser> {
+    async deleteUser(id: number): Promise<AssociateUser> {
         if (!id) {
             throw new Error("No id provided!");
         }

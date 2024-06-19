@@ -43,13 +43,13 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 nick_name: "test-nick"
             });
 
-            const foundUser = await sut.findUserById(user.id.toString());
+            const foundUser = await sut.findUserById(user.id);
 
             expect(foundUser).toMatchObject(user);
         });
 
         it("Should fail when attempt to find an user that does not exist", async () => {
-            expect(sut.findUserById(`${(sut.users.length + 1)}`)).rejects.toThrow("User not found!");
+            expect(sut.findUserById((sut.users.length + 1))).rejects.toThrow("User not found!");
         });
     });
 
@@ -81,7 +81,7 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
         });
 
         it("Should fail when attempt to update an user without data", async () => {
-            expect(sut.updateUser("1", null)).rejects.toThrow("No data provided!");
+            expect(sut.updateUser(1, null)).rejects.toThrow("No data provided!");
         });
 
         it("Should update an user with given id and data correctly", async () => {
@@ -92,7 +92,7 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 nick_name: "test-nick"
             });
 
-            const updatedUser = await sut.updateUser(user.id.toString(), {
+            const updatedUser = await sut.updateUser(user.id, {
                 name: "test",
                 email: "test@example.com",
                 password: "1234567",
@@ -130,7 +130,7 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 nick_name: "test-nick"
             });
 
-            await sut.deleteUser(user.id.toString());
+            await sut.deleteUser(user.id);
 
             expect(sut.users).toHaveLength(0);
         });
@@ -143,7 +143,7 @@ describe("InMemoryAssociateUsersRepository unit tests", () => {
                 nick_name: "test-nick"
             });
 
-            await expect(sut.deleteUser(`${(sut.users.length + 1)}`)).rejects.toThrow("User not found!");
+            await expect(sut.deleteUser((sut.users.length + 1))).rejects.toThrow("User not found!");
         });
     });
 })
