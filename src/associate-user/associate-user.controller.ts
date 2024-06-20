@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Logger, BadRequestException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Logger, BadRequestException, UsePipes, ValidationPipe } from '@nestjs/common';
 import { AssociateUserService } from './associate-user.service';
 import { CreateAssociateUserDto } from './dto/create-associate-user.dto';
 import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
+import { TransformPasswordPipe } from 'src/auth/pipes/transform-password.pipe';
 
 @Controller('associate-user')
 export class AssociateUserController {
@@ -11,6 +12,7 @@ export class AssociateUserController {
   private associateUserService: AssociateUserService;
 
   @Post()
+  @UsePipes(ValidationPipe, TransformPasswordPipe)
   create(@Body() createAssociateUserDto: CreateAssociateUserDto) {
     try {
       return this.associateUserService.create(createAssociateUserDto);

@@ -1,9 +1,9 @@
 import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-user.dto";
 import { UpdateAssociateUserDto } from "src/associate-user/dto/update-associate-user.dto";
 import { AssociateUser } from "src/associate-user/entities/associate-user.entity";
-import { AssociateUsersRepository } from "../associate-users.repository";
 import { PrismaService } from "src/prisma.service";
 import { BadRequestException, InternalServerErrorException, Logger } from "@nestjs/common";
+import { AssociateUsersRepository } from "./associate-users.repository";
 
 export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     private logger = new Logger(PrismaAssociateUserRepository.name);
@@ -36,6 +36,26 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
         }
 
     }
+
+    async findUserByEmail(email: string): Promise<AssociateUser> {
+        try {
+            if (!email) {
+                throw new BadRequestException("No email provided!");
+            }
+
+            const user = await this.prisma.associateUser.findUnique({
+                where: { email }
+            });
+
+
+            return user;
+        }
+        catch (err) {
+            this.logger.error(err);
+            throw new InternalServerErrorException("Unable to find user!");
+        }
+    }
+
     async findAllUsers(): Promise<AssociateUser[]> {
         try {
             const users = await this.prisma.associateUser.findMany();

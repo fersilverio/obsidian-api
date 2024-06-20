@@ -1,7 +1,7 @@
 import { AssociateUser } from "src/associate-user/entities/associate-user.entity";
-import { AssociateUsersRepository } from "../associate-users.repository";
 import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-user.dto";
 import { UpdateAssociateUserDto } from "src/associate-user/dto/update-associate-user.dto";
+import { AssociateUsersRepository } from "./associate-users.repository";
 
 
 export class InMemoryAssociateUsersRepository implements AssociateUsersRepository {
@@ -42,6 +42,21 @@ export class InMemoryAssociateUsersRepository implements AssociateUsersRepositor
 
         return user;
     }
+
+    async findUserByEmail(email: string): Promise<AssociateUser> {
+        if (!email) {
+            throw new Error("No email provemailed!");
+        }
+
+        const user = this.users.find(user => user.email === email);
+
+        if (!user) {
+            throw new Error("User not found!");
+        }
+
+        return user;
+    }
+
     async findAllUsers(): Promise<AssociateUser[]> {
         return this.users;
     }

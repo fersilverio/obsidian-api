@@ -1,8 +1,8 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { PrismaAssociateUserRepository } from "../prisma-repository/prisma-associate-user.repository";
 import { BadRequestException } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-user.dto";
+import { PrismaAssociateUserRepository } from "../prisma-associate-user.repository";
 
 describe("Prisma Associate Users Repository Integration Tests", () => {
     let sut: PrismaAssociateUserRepository;

@@ -24,6 +24,10 @@ export class AssociateUserService {
     return await this.associateUserRepository.findUserById(id);
   }
 
+  async findOneByEmail(email: string) {
+    return await this.associateUserRepository.findUserByEmail(email);
+  }
+
   update(id: number, updateAssociateUserDto: UpdateAssociateUserDto) {
     return this.associateUserRepository.updateUser(id, updateAssociateUserDto);
   }
