@@ -18,7 +18,7 @@ export class AssociateUserController {
       return this.associateUserService.create(createAssociateUserDto);
     } catch (err) {
       this.logger.error(err);
-      throw new BadRequestException(err.message);
+      throw new BadRequestException("Could not access create functionality");
     }
 
   }
@@ -29,7 +29,7 @@ export class AssociateUserController {
       return this.associateUserService.findAll();
     } catch (err) {
       this.logger.error(err);
-      throw new BadRequestException(err.message);
+      throw new BadRequestException("Could not access findAll functionality");
     }
   }
 
@@ -39,7 +39,7 @@ export class AssociateUserController {
       return this.associateUserService.findOne(+id);
     } catch (err) {
       this.logger.error(err);
-      throw new BadRequestException(err.message);
+      throw new BadRequestException("Could not access findOne functionality");
     }
   }
 
@@ -49,7 +49,7 @@ export class AssociateUserController {
       return this.associateUserService.update(+id, updateAssociateUserDto);
     } catch (err) {
       this.logger.error(err);
-      throw new BadRequestException(err.message);
+      throw new BadRequestException("Could not access update functionality");
     }
   }
 
@@ -59,7 +59,7 @@ export class AssociateUserController {
       return this.associateUserService.remove(+id);
     } catch (err) {
       this.logger.error(err);
-      throw new BadRequestException(err.message);
+      throw new BadRequestException("Could not access delete functionality");
     }
   }
 }

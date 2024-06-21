@@ -3,7 +3,9 @@ import { UpdateAssociateUserDto } from "src/associate-user/dto/update-associate-
 import { AssociateUser } from "src/associate-user/entities/associate-user.entity";
 import { PrismaService } from "src/prisma.service";
 import { BadRequestException, InternalServerErrorException, Logger } from "@nestjs/common";
-import { AssociateUsersRepository } from "./associate-users.repository";
+import { AssociateUsersRepository } from "../associate-users.repository";
+import { Prisma } from "@prisma/client";
+import { sendPrismaErrorMessage } from "./errors/utils";
 
 export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     private logger = new Logger(PrismaAssociateUserRepository.name);
@@ -15,7 +17,10 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
             const user = await this.prisma.associateUser.create({ data });
             return user;
         } catch (err) {
-            this.logger.error(err);
+            if (err instanceof Prisma.PrismaClientKnownRequestError) {
+                this.logger.error(sendPrismaErrorMessage(err));
+            }
+
             throw new InternalServerErrorException("Could not create user!");
         }
     }
@@ -76,7 +81,7 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
                 throw new BadRequestException("No data provided!");
             }
 
-            const updatedUser = await this.prisma.associateUser.update({ where: { id: + id }, data })
+            const updatedUser = await this.prisma.associateUser.update({ where: { id }, data })
             return updatedUser;
         } catch (err) {
             this.logger.error(err);

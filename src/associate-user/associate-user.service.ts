@@ -1,4 +1,4 @@
-import { BadRequestException, Inject } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import { CreateAssociateUserDto } from './dto/create-associate-user.dto';
 import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
 import { AssociateUser } from './entities/associate-user.entity';
@@ -12,8 +12,7 @@ export class AssociateUserService {
 
 
   async create(dto: CreateAssociateUserDto): Promise<AssociateUser> {
-    const user = await this.associateUserRepository.createUser(dto);
-    return user;
+    return await this.associateUserRepository.createUser(dto);
   }
 
   async findAll() {
@@ -28,11 +27,11 @@ export class AssociateUserService {
     return await this.associateUserRepository.findUserByEmail(email);
   }
 
-  update(id: number, updateAssociateUserDto: UpdateAssociateUserDto) {
+  async update(id: number, updateAssociateUserDto: UpdateAssociateUserDto) {
     return this.associateUserRepository.updateUser(id, updateAssociateUserDto);
   }
 
-  remove(id: number) {
+  async remove(id: number) {
     return this.associateUserRepository.deleteUser(id);
   }
 }
