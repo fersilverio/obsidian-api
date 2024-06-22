@@ -1,4 +1,3 @@
-import { Logger } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 
 export function sendPrismaErrorMessage(error: Prisma.PrismaClientKnownRequestError) {
