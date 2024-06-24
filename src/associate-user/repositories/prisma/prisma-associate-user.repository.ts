@@ -26,12 +26,8 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     }
     async findUserById(id: number): Promise<AssociateUser> {
         try {
-            if (!id) {
-                throw new BadRequestException("No id provided!");
-            }
-
             const user = await this.prisma.associateUser.findUniqueOrThrow({
-                where: { id: +id }
+                where: { id }
             });
 
             return user;
@@ -44,10 +40,6 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
 
     async findUserByEmail(email: string): Promise<AssociateUser> {
         try {
-            if (!email) {
-                throw new BadRequestException("No email provided!");
-            }
-
             const user = await this.prisma.associateUser.findUniqueOrThrow({
                 where: { email }
             });
@@ -72,14 +64,6 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
 
     async updateUser(id: number, data: UpdateAssociateUserDto): Promise<AssociateUser> {
         try {
-            if (!id) {
-                throw new BadRequestException("No id provided!");
-            }
-
-            if (!data) {
-                throw new BadRequestException("No data provided!");
-            }
-
             await this.prisma.associateUser.findUniqueOrThrow({ where: { id } });
 
             const updatedUser = await this.prisma.associateUser.update({ where: { id }, data });
@@ -92,10 +76,6 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     }
     async deleteUser(id: number): Promise<AssociateUser> {
         try {
-            if (!id) {
-                throw new BadRequestException("No id provided!");
-            }
-
             await this.prisma.associateUser.findUniqueOrThrow({ where: { id } });
 
             const deletedUser = await this.prisma.associateUser.delete({ where: { id } });
