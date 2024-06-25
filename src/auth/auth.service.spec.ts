@@ -1,18 +1,35 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from './auth.service';
+import { AssociateUserService } from 'src/associate-user/associate-user.service';
+import { JwtService } from '@nestjs/jwt';
 
-describe('AuthService', () => {
-  let service: AuthService;
+describe('AuthService unit tests', () => {
+  let sut: AuthService;
+  let associatedService: AssociateUserService;
+  let jwtService: JwtService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [AuthService],
+      providers: [
+        AuthService,
+        AssociateUserService,
+        JwtService,
+      ],
     }).compile();
 
-    service = module.get<AuthService>(AuthService);
+    sut = module.get<AuthService>(AuthService);
+    jwtService = module.get<JwtService>(JwtService);
+    associatedService = module.get<AssociateUserService>(AssociateUserService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
+
+  describe("sigIn functionality", () => {
+    it("Should fail when user password does not check", async () => {
+      const spyFindByEmail = jest.spyOn(associatedService, "findOneByEmail");
+    });
+
+
   });
+
+
 });

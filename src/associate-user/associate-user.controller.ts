@@ -3,8 +3,11 @@ import { AssociateUserService } from './associate-user.service';
 import { CreateAssociateUserDto } from './dto/create-associate-user.dto';
 import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
 import { TransformPasswordPipe } from 'src/auth/pipes/transform-password.pipe';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { AssociateUser } from './entities/associate-user.entity';
 
 @Controller('associate-user')
+@ApiTags("Associate User")
 export class AssociateUserController {
   private logger = new Logger(AssociateUserController.name);
 
@@ -12,8 +15,12 @@ export class AssociateUserController {
   private associateUserService: AssociateUserService;
 
   @Post()
+  @ApiOperation({ summary: "Creates a new associated user" })
+  @ApiCreatedResponse({ status: 201, description: "Created", type: AssociateUser })
+  @ApiBadRequestResponse({ status: 400, description: "Bad request" })
+  @ApiInternalServerErrorResponse()
   @UsePipes(ValidationPipe, TransformPasswordPipe)
-  create(@Body() createAssociateUserDto: CreateAssociateUserDto) {
+  create(@Body() createAssociateUserDto: CreateAssociateUserDto): Promise<AssociateUser> {
     try {
       return this.associateUserService.create(createAssociateUserDto);
     } catch (err) {
@@ -24,6 +31,7 @@ export class AssociateUserController {
   }
 
   @Get()
+  @ApiOperation({ summary: "Retrieves all associated users" })
   findAll() {
     try {
       return this.associateUserService.findAll();
@@ -34,6 +42,7 @@ export class AssociateUserController {
   }
 
   @Get(':id')
+  @ApiOperation({ summary: "Retrieves an associated user by id" })
   findOne(@Param('id') id: string) {
     try {
       return this.associateUserService.findOne(+id);
@@ -44,6 +53,7 @@ export class AssociateUserController {
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: "Updated an associated user" })
   update(@Param('id') id: string, @Body() updateAssociateUserDto: UpdateAssociateUserDto) {
     try {
       return this.associateUserService.update(+id, updateAssociateUserDto);
@@ -54,6 +64,7 @@ export class AssociateUserController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: "Deletes an associated user" })
   remove(@Param('id') id: string) {
     try {
       return this.associateUserService.remove(+id);
