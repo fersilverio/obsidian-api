@@ -2,10 +2,11 @@ import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-
 import { UpdateAssociateUserDto } from "src/associate-user/dto/update-associate-user.dto";
 import { AssociateUser } from "src/associate-user/entities/associate-user.entity";
 import { PrismaService } from "src/prisma.service";
-import { BadRequestException, InternalServerErrorException, Logger } from "@nestjs/common";
+import { InternalServerErrorException, Logger } from "@nestjs/common";
 import { AssociateUsersRepository } from "../associate-users.repository";
 import { Prisma } from "@prisma/client";
 import { sendPrismaErrorMessage } from "./errors/utils";
+import { Role } from "src/associate-user/enums/roles";
 
 export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     private logger = new Logger(PrismaAssociateUserRepository.name);
@@ -14,7 +15,7 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
 
     async createUser(data: CreateAssociateUserDto): Promise<AssociateUser> {
         try {
-            const user = await this.prisma.associateUser.create({ data });
+            const user = await this.prisma.associateUser.create({ data: { ...data, role: Role.User } });
             return user;
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError) {
@@ -40,7 +41,7 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
 
     async findUserByEmail(email: string): Promise<AssociateUser> {
         try {
-            const user = await this.prisma.associateUser.findUniqueOrThrow({
+            const user = await this.prisma.associateUser.findUnique({
                 where: { email }
             });
 

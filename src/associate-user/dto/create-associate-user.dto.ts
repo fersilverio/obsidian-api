@@ -1,4 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
+import { Role } from "@prisma/client";
 import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
 
 export class CreateAssociateUserDto {
@@ -25,5 +26,8 @@ export class CreateAssociateUserDto {
     @MinLength(8)
     @ApiProperty({ example: "a-desired-password", required: true })
     password: string;
+
+    @IsNotEmpty()
+    role: Role;
 
 }

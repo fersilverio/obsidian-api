@@ -13,6 +13,7 @@ model AssociateUser {
   nick_name       String
   email           String   @unique
   password        String
+  role            Role     @default(USER)
   level           Int?
   rank            Int?
   clan            String?
@@ -21,4 +22,9 @@ model AssociateUser {
   update_date     DateTime @updatedAt
 
   @@map("associate_users")
+}
+
+enum Role {
+  ADMIN
+  USER
 }
