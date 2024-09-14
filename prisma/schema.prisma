@@ -24,7 +24,50 @@ model AssociateUser {
   @@map("associate_users")
 }
 
+model Card {
+  id          Int               @id @default(autoincrement())
+  name        String
+  type        CardType
+  element     CardElementalType
+  attack      Int
+  defense     Int
+  cost        Int
+  description String
+  image_url   String
+  create_date DateTime          @default(now())
+  update_date DateTime          @updatedAt
+
+  @@map("cards")
+}
+
+model CardPossessions {
+  id                Int      @id @default(autoincrement())
+  associate_user_id Int
+  card_id           Int
+  quantity          Int
+  create_date       DateTime @default(now())
+  update_date       DateTime @updatedAt
+}
+
 enum Role {
   ADMIN
   USER
+}
+
+enum CardElementalType {
+  FIRE
+  ICE
+  WATER
+  EARTH
+  LIGHTNING
+  DARKNESS
+  WIND
+  NEUTRAL
+}
+
+enum CardType {
+  ENTITY
+  SPELL
+  EQUIPMENT
+  TRAP
 }
