@@ -1,6 +1,6 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Role } from "@prisma/client";
-import { IsEmail, IsNotEmpty, IsString, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { Role } from "../enums/roles";
 
 export class CreateAssociateUserDto {
     @IsString()
@@ -27,7 +27,8 @@ export class CreateAssociateUserDto {
     @ApiProperty({ example: "a-desired-password", required: true })
     password: string;
 
-    @IsNotEmpty()
+    @IsOptional()
+    @IsEnum(Role)
     role: Role;
 
 }

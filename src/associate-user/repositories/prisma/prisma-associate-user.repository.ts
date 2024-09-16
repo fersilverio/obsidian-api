@@ -1,12 +1,13 @@
 import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-user.dto";
 import { UpdateAssociateUserDto } from "src/associate-user/dto/update-associate-user.dto";
 import { AssociateUser } from "src/associate-user/entities/associate-user.entity";
-import { PrismaService } from "src/prisma.service";
 import { InternalServerErrorException, Logger } from "@nestjs/common";
 import { AssociateUsersRepository } from "../associate-users.repository";
 import { Prisma } from "@prisma/client";
 import { sendPrismaErrorMessage } from "./errors/utils";
 import { Role } from "src/associate-user/enums/roles";
+import { PrismaService } from "prisma/prisma.service";
+import { Roles } from "src/decorators/roles.decorator";
 
 export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     private logger = new Logger(PrismaAssociateUserRepository.name);
@@ -14,8 +15,10 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     constructor(private readonly prisma: PrismaService) { }
 
     async createUser(data: CreateAssociateUserDto): Promise<AssociateUser> {
+        const definedRole = data.role ?? Role.User;
+
         try {
-            const user = await this.prisma.associateUser.create({ data: { ...data, role: Role.User } });
+            const user = await this.prisma.associateUser.create({ data: { ...data, role: definedRole } });
             return user;
         } catch (err) {
             if (err instanceof Prisma.PrismaClientKnownRequestError) {

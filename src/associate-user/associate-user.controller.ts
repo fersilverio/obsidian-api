@@ -1,13 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Logger, BadRequestException, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Logger, BadRequestException, UsePipes, ValidationPipe, UseGuards } from '@nestjs/common';
 import { AssociateUserService } from './associate-user.service';
 import { CreateAssociateUserDto } from './dto/create-associate-user.dto';
 import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
 import { TransformPasswordPipe } from 'src/auth/pipes/transform-password.pipe';
-import { ApiBadRequestResponse, ApiCreatedResponse, ApiFoundResponse, ApiInternalServerErrorResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AssociateUser } from './entities/associate-user.entity';
+import { Roles } from 'src/decorators/roles.decorator';
+import { Role } from './enums/roles';
+import { RoleGuard } from 'src/guards/role.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('associate-user')
 @ApiTags("Associate User")
+@UseGuards(AuthGuard, RoleGuard)
 export class AssociateUserController {
   private logger = new Logger(AssociateUserController.name);
 
@@ -19,6 +24,7 @@ export class AssociateUserController {
   @ApiCreatedResponse({ status: 201, description: "Created", type: AssociateUser })
   @ApiBadRequestResponse({ status: 400, description: "Could not access create functionality" })
   @UsePipes(ValidationPipe, TransformPasswordPipe)
+  @Roles(Role.Admin)
   create(@Body() createAssociateUserDto: CreateAssociateUserDto): Promise<AssociateUser> {
     try {
       return this.associateUserService.create(createAssociateUserDto);
