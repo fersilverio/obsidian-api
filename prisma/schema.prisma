@@ -8,34 +8,36 @@ datasource db {
 }
 
 model AssociateUser {
-  id              Int      @id @default(autoincrement())
+  id              Int               @id @default(autoincrement())
   name            String
   nick_name       String
-  email           String   @unique
+  email           String            @unique
   password        String
-  role            Role     @default(USER)
+  role            Role              @default(USER)
   level           Int?
   rank            Int?
   clan            String?
-  number_of_cards Int      @default(0)
-  create_date     DateTime @default(now())
-  update_date     DateTime @updatedAt
+  number_of_cards Int               @default(0)
+  create_date     DateTime          @default(now())
+  update_date     DateTime          @updatedAt
+  CardPossessions CardPossessions[]
 
   @@map("associate_users")
 }
 
 model Card {
-  id          Int               @id @default(autoincrement())
-  name        String
-  type        CardType
-  element     CardElementalType
-  attack      Int
-  defense     Int
-  cost        Int
-  description String
-  image_url   String
-  create_date DateTime          @default(now())
-  update_date DateTime          @updatedAt
+  id              Int               @id @default(autoincrement())
+  name            String
+  type            CardType
+  element         CardElementalType
+  attack          Int
+  defense         Int
+  cost            Int
+  description     String
+  image_url       String
+  create_date     DateTime          @default(now())
+  update_date     DateTime          @updatedAt
+  CardPossessions CardPossessions[]
 
   @@map("cards")
 }
@@ -47,6 +49,12 @@ model CardPossessions {
   quantity          Int
   create_date       DateTime @default(now())
   update_date       DateTime @updatedAt
+
+  // Relations
+  associate_user AssociateUser @relation(fields: [associate_user_id], references: [id])
+  card           Card          @relation(fields: [card_id], references: [id])
+
+  @@map("card_possessions")
 }
 
 enum Role {

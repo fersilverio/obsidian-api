@@ -7,7 +7,6 @@ import { Prisma } from "@prisma/client";
 import { sendPrismaErrorMessage } from "./errors/utils";
 import { Role } from "src/associate-user/enums/roles";
 import { PrismaService } from "prisma/prisma.service";
-import { Roles } from "src/decorators/roles.decorator";
 
 export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     private logger = new Logger(PrismaAssociateUserRepository.name);
