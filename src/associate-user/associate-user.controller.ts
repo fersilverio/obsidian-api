@@ -5,10 +5,10 @@ import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
 import { TransformPasswordPipe } from 'src/auth/pipes/transform-password.pipe';
 import { ApiBadRequestResponse, ApiCreatedResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AssociateUser } from './entities/associate-user.entity';
-import { Roles } from 'src/decorators/roles.decorator';
+import { Roles } from 'src/shared/decorators/roles.decorator';
 import { Role } from './enums/roles';
-import { RoleGuard } from 'src/guards/role.guard';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { RoleGuard } from 'src/shared/guards/role.guard';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 @Controller('associate-user')
 @ApiTags("Associate User")
