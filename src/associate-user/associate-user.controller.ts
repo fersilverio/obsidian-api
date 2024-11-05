@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Logger, BadRequestException, UsePipes, ValidationPipe, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Logger, BadRequestException, UsePipes, ValidationPipe, UseGuards, InternalServerErrorException } from '@nestjs/common';
 import { AssociateUserService } from './associate-user.service';
 import { CreateAssociateUserDto } from './dto/create-associate-user.dto';
 import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
@@ -29,8 +29,10 @@ export class AssociateUserController {
     try {
       return this.associateUserService.create(createAssociateUserDto);
     } catch (err) {
-      this.logger.error(err);
-      throw new BadRequestException("Could not access create functionality");
+      if (err instanceof InternalServerErrorException) {
+        this.logger.error(err);
+        throw new InternalServerErrorException(err.message);
+      }
     }
 
   }

@@ -20,11 +20,15 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
             const user = await this.prisma.associateUser.create({ data: { ...data, role: definedRole } });
             return user;
         } catch (err) {
+            let errorMessage = err.message;
             if (err instanceof Prisma.PrismaClientKnownRequestError) {
-                this.logger.error(sendPrismaErrorMessage(err));
+                errorMessage = sendPrismaErrorMessage(err);
+                this.logger.error(errorMessage);
             }
 
-            throw new InternalServerErrorException("Could not create user!");
+            throw new InternalServerErrorException("Could not create user!", {
+                cause: errorMessage
+            });
         }
     }
     async findUserById(id: number): Promise<AssociateUser> {
