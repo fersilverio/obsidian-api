@@ -12,7 +12,7 @@ import { AuthGuard } from 'src/shared/guards/auth.guard';
       global: true,
       secret: process.env.JWT_SECRET,
       signOptions: {
-        expiresIn: "60s",
+        expiresIn: "3600s",
       },
     }),
   ],

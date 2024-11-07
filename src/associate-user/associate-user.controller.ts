@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Logger, BadRequestException, UsePipes, ValidationPipe, UseGuards, InternalServerErrorException } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Logger, BadRequestException, UsePipes, ValidationPipe, UseGuards, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { AssociateUserService } from './associate-user.service';
 import { CreateAssociateUserDto } from './dto/create-associate-user.dto';
 import { UpdateAssociateUserDto } from './dto/update-associate-user.dto';
@@ -29,12 +29,11 @@ export class AssociateUserController {
     try {
       return this.associateUserService.create(createAssociateUserDto);
     } catch (err) {
+      this.logger.error(err, err.cause);
       if (err instanceof InternalServerErrorException) {
-        this.logger.error(err);
         throw new InternalServerErrorException(err.message);
       }
     }
-
   }
 
   @Get()
@@ -46,7 +45,9 @@ export class AssociateUserController {
       return this.associateUserService.findAll();
     } catch (err) {
       this.logger.error(err);
-      throw new BadRequestException("Could not access findAll functionality");
+      if (err instanceof InternalServerErrorException) {
+        throw new InternalServerErrorException(err.message);
+      }
     }
   }
 
@@ -58,8 +59,10 @@ export class AssociateUserController {
     try {
       return this.associateUserService.findOne(+id);
     } catch (err) {
-      this.logger.error(err);
-      throw new BadRequestException("Could not access findOne functionality");
+      this.logger.error(err, err.cause);
+      if (err instanceof NotFoundException) {
+        throw new NotFoundException(err.message);
+      }
     }
   }
 

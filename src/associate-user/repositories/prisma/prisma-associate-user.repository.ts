@@ -1,7 +1,7 @@
 import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-user.dto";
 import { UpdateAssociateUserDto } from "src/associate-user/dto/update-associate-user.dto";
 import { AssociateUser } from "src/associate-user/entities/associate-user.entity";
-import { InternalServerErrorException, Logger } from "@nestjs/common";
+import { InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
 import { AssociateUsersRepository } from "../associate-users.repository";
 import { Prisma } from "@prisma/client";
 import { sendPrismaErrorMessage } from "./errors/utils";
@@ -27,7 +27,7 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
             }
 
             throw new InternalServerErrorException("Could not create user!", {
-                cause: errorMessage
+                cause: `[CAUSE] ${errorMessage}`,
             });
         }
     }
@@ -40,7 +40,9 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
             return user;
         } catch (err) {
             this.logger.error(err);
-            throw new InternalServerErrorException("Unable to find user!");
+            throw new NotFoundException("Unable to find user!", {
+                cause: `[CAUSE] ${err.message}`,
+            });
         }
 
     }
