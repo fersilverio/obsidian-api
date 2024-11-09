@@ -32,24 +32,20 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
         }
     }
     async findUserById(id: number): Promise<AssociateUser> {
-        try {
-            const user = await this.prisma.associateUser.findUniqueOrThrow({
-                where: { id }
-            });
+        const user = await this.prisma.associateUser.findUnique({
+            where: { id }
+        });
 
-            return user;
-        } catch (err) {
-            this.logger.error(err);
-            throw new NotFoundException("Unable to find user!", {
-                cause: `[CAUSE] ${err.message}`,
-            });
+        if (!user) {
+            throw new NotFoundException("Unable to find user!");
         }
 
+        return user;
     }
 
     async findUserByEmail(email: string): Promise<AssociateUser> {
         try {
-            const user = await this.prisma.associateUser.findUnique({
+            const user = await this.prisma.associateUser.findUniqueOrThrow({
                 where: { email }
             });
 
@@ -57,7 +53,9 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
         }
         catch (err) {
             this.logger.error(err);
-            throw new InternalServerErrorException("Unable to find user!");
+            throw new NotFoundException("Unable to find user!", {
+                cause: `[CAUSE] ${err.message}`,
+            });
         }
     }
 
@@ -80,7 +78,9 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
             return updatedUser;
         } catch (err) {
             this.logger.error(err);
-            throw new InternalServerErrorException("Unable to update user!");
+            throw new NotFoundException("Unable to update user!", {
+                cause: `[CAUSE] ${err.message}`,
+            });
         }
     }
     async deleteUser(id: number): Promise<AssociateUser> {
@@ -93,7 +93,9 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
 
         } catch (err) {
             this.logger.error(err);
-            throw new InternalServerErrorException("Unable to delete user!");
+            throw new NotFoundException("Unable to delete user!", {
+                cause: `[CAUSE] ${err.message}`,
+            });
         }
     }
 

@@ -14,8 +14,6 @@ import { AuthGuard } from 'src/shared/guards/auth.guard';
 @ApiTags("Associate User")
 @UseGuards(AuthGuard, RoleGuard)
 export class AssociateUserController {
-  private logger = new Logger(AssociateUserController.name);
-
   @Inject(AssociateUserService)
   private associateUserService: AssociateUserService;
 
@@ -26,14 +24,7 @@ export class AssociateUserController {
   @UsePipes(ValidationPipe, TransformPasswordPipe)
   @Roles(Role.Admin)
   create(@Body() createAssociateUserDto: CreateAssociateUserDto): Promise<AssociateUser> {
-    try {
-      return this.associateUserService.create(createAssociateUserDto);
-    } catch (err) {
-      this.logger.error(err, err.cause);
-      if (err instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(err.message);
-      }
-    }
+    return this.associateUserService.create(createAssociateUserDto);
   }
 
   @Get()
@@ -41,14 +32,7 @@ export class AssociateUserController {
   @ApiOkResponse({ status: 200, description: "Success", isArray: true, type: AssociateUser })
   @ApiBadRequestResponse({ status: 400, description: "Could not access findAll functionality" })
   findAll() {
-    try {
-      return this.associateUserService.findAll();
-    } catch (err) {
-      this.logger.error(err);
-      if (err instanceof InternalServerErrorException) {
-        throw new InternalServerErrorException(err.message);
-      }
-    }
+    return this.associateUserService.findAll();
   }
 
   @Get(':id')
@@ -56,14 +40,7 @@ export class AssociateUserController {
   @ApiOkResponse({ status: 200, description: "Success", type: AssociateUser })
   @ApiBadRequestResponse({ status: 400, description: "Could not access findOne functionality" })
   findOne(@Param('id') id: string) {
-    try {
-      return this.associateUserService.findOne(+id);
-    } catch (err) {
-      this.logger.error(err, err.cause);
-      if (err instanceof NotFoundException) {
-        throw new NotFoundException(err.message);
-      }
-    }
+    return this.associateUserService.findOne(+id);
   }
 
   @Patch(':id')
@@ -71,12 +48,7 @@ export class AssociateUserController {
   @ApiOkResponse({ status: 200, description: "Success", type: AssociateUser })
   @ApiBadRequestResponse({ status: 400, description: "Could not access update functionality" })
   update(@Param('id') id: string, @Body() updateAssociateUserDto: UpdateAssociateUserDto) {
-    try {
-      return this.associateUserService.update(+id, updateAssociateUserDto);
-    } catch (err) {
-      this.logger.error(err);
-      throw new BadRequestException("Could not access update functionality");
-    }
+    return this.associateUserService.update(+id, updateAssociateUserDto);
   }
 
   @Delete(':id')
@@ -84,11 +56,6 @@ export class AssociateUserController {
   @ApiOkResponse({ status: 200, description: "Success", type: AssociateUser })
   @ApiBadRequestResponse({ status: 400, description: "Could not access delete functionality" })
   remove(@Param('id') id: string) {
-    try {
-      return this.associateUserService.remove(+id);
-    } catch (err) {
-      this.logger.error(err);
-      throw new BadRequestException("Could not access delete functionality");
-    }
+    return this.associateUserService.remove(+id);
   }
 }
