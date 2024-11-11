@@ -1,12 +1,12 @@
 import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-user.dto";
 import { UpdateAssociateUserDto } from "src/associate-user/dto/update-associate-user.dto";
 import { AssociateUser } from "src/associate-user/entities/associate-user.entity";
-import { InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
+import { BadRequestException, InternalServerErrorException, Logger, NotFoundException } from "@nestjs/common";
 import { AssociateUsersRepository } from "../associate-users.repository";
 import { Prisma } from "@prisma/client";
 import { sendPrismaErrorMessage } from "./errors/utils";
-import { Role } from "src/associate-user/enums/roles";
 import { PrismaService } from "prisma/prisma.service";
+import { Role } from "../../enums/roles";
 
 export class PrismaAssociateUserRepository implements AssociateUsersRepository {
     private logger = new Logger(PrismaAssociateUserRepository.name);
@@ -32,12 +32,16 @@ export class PrismaAssociateUserRepository implements AssociateUsersRepository {
         }
     }
     async findUserById(id: number): Promise<AssociateUser> {
+        if (!id) {
+            throw new BadRequestException("Unable to find user!", { cause: "[CAUSE] Id was not provided" });
+        }
+
         const user = await this.prisma.associateUser.findUnique({
             where: { id }
         });
 
         if (!user) {
-            throw new NotFoundException("Unable to find user!");
+            throw new NotFoundException("Unable to find user!", { cause: "[CAUSE] Id was not found at database" });
         }
 
         return user;

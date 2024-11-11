@@ -1,8 +1,9 @@
 import { Test, TestingModule } from "@nestjs/testing";
-import { InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
 import { PrismaClient } from "@prisma/client";
 import { CreateAssociateUserDto } from "src/associate-user/dto/create-associate-user.dto";
 import { PrismaAssociateUserRepository } from "../prisma/prisma-associate-user.repository";
+import { Role } from "../../enums/roles";
 
 describe("Prisma Associate Users Repository Integration Tests", () => {
     let sut: PrismaAssociateUserRepository;
@@ -25,12 +26,13 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
     });
 
     describe("createUser functionality", () => {
-        it("Should create a new user", async () => {
+        it("Should create a new common user", async () => {
             const data: CreateAssociateUserDto = {
                 name: "Test",
                 nick_name: "Little T",
                 email: "test@test.com",
-                password: "123456789"
+                password: "123456789",
+                role: null
             }
 
             const result = await sut.createUser(data);
@@ -46,17 +48,48 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                 rank: null,
                 clan: null,
                 number_of_cards: 0,
+                role: Role.User,
                 create_date: expect.any(Date),
                 update_date: expect.any(Date),
             });
+
+            await prisma.associateUser.delete({ where: { id: result.id } });
+        });
+
+        it("Should create a new admin user", async () => {
+            const data: CreateAssociateUserDto = {
+                name: "Test",
+                nick_name: "Little T",
+                email: "test@test.com",
+                password: "123456789",
+                role: Role.Admin,
+            }
+
+            const result = await sut.createUser(data);
+
+            expect(result).toBeDefined();
+            expect(result).toMatchObject({
+                id: result.id,
+                name: "Test",
+                nick_name: "Little T",
+                email: "test@test.com",
+                password: "123456789",
+                level: null,
+                rank: null,
+                clan: null,
+                number_of_cards: 0,
+                role: Role.Admin,
+                create_date: expect.any(Date),
+                update_date: expect.any(Date),
+            });
+
+            await prisma.associateUser.delete({ where: { id: result.id } });
         });
     });
 
     describe("findUserById functionality", () => {
         it("Should fail when attempt to find an user without and provided id", async () => {
-            const id = null;
-
-            await expect(sut.findUserById(id)).rejects.toThrow(new InternalServerErrorException("Unable to find user!"));
+            await expect(sut.findUserById(null)).rejects.toThrow(new BadRequestException("Unable to find user!"));
         });
 
         it("Should retrieve an user by its id", async () => {
@@ -64,7 +97,8 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                 name: "Test",
                 nick_name: "Little T",
                 email: "test@test.com",
-                password: "123456789"
+                password: "123456789",
+                role: null
             }
             const createdUser = await sut.createUser(data);
 
@@ -98,7 +132,8 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                 name: "Test",
                 nick_name: "Little T",
                 email: "test@test.com",
-                password: "123456789"
+                password: "123456789",
+                role: null
             }
             const createdUser = await sut.createUser(data);
 
@@ -127,7 +162,8 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                     name: "Test",
                     nick_name: "Little T",
                     email: `test${i}@test.com`,
-                    password: "123456789"
+                    password: "123456789",
+                    role: null
                 }
 
                 await sut.createUser(data);
@@ -146,7 +182,8 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                 name: "Test",
                 nick_name: "Little T",
                 email: "test@test.com",
-                password: "123456789"
+                password: "123456789",
+                role: null
             });
 
             const id = await prisma.associateUser.aggregate({
@@ -162,7 +199,8 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                 name: "Test",
                 nick_name: "Little T",
                 email: "test@test.com",
-                password: "123456789"
+                password: "123456789",
+                role: null
             });
 
             const id = null;
@@ -178,7 +216,8 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                 name: "Test",
                 nick_name: "Little T",
                 email: "test@test.com",
-                password: "123456789"
+                password: "123456789",
+                role: null
             }
             const createdUser = await sut.createUser(data);
 
@@ -214,7 +253,8 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                 name: "Test",
                 nick_name: "Little T",
                 email: "test@test.com",
-                password: "123456789"
+                password: "123456789",
+                role: null
             });
 
             const id = null;
@@ -227,7 +267,8 @@ describe("Prisma Associate Users Repository Integration Tests", () => {
                 name: "Test",
                 nick_name: "Little T",
                 email: "test@test.com",
-                password: "123456789"
+                password: "123456789",
+                role: null
             }
             const createdUser = await sut.createUser(data);
 
